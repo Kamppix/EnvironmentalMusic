@@ -15,9 +15,9 @@
   "license": "MIT",
   "icon": "assets/environmentalmusic/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "com.github.kamppix.environmentalmusic.EnvironmentalMusic"
     ]
   },

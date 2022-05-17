@@ -1,14 +1,17 @@
 package com.github.kamppix.environmentalmusic;
 
-import net.fabricmc.api.ModInitializer;
+import com.github.kamppix.environmentalmusic.sound.ModMusicTypes;
+import com.github.kamppix.environmentalmusic.sound.ModSounds;
+import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.sound.MusicType;
+import net.minecraft.sound.MusicSound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EnvironmentalMusic implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("environmentalmusic");
+public class EnvironmentalMusic implements ClientModInitializer {
+	public static final String MOD_ID = "environmentalmusic";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
-	public void onInitialize() {
-		LOGGER.info("Hello Fabric world!");
-	}
+	public void onInitializeClient() { ModSounds.registerModSounds(); }
 }
