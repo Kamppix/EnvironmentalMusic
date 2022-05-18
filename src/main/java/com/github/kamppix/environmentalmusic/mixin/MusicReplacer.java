@@ -41,7 +41,7 @@ public class MusicReplacer {
 
     private static final int SPACE_LAYER = 200;
     private static final int UNDERGROUND_LAYER = 40;
-    private static final int CAVERN_LAYER = -8;
+    private static final int CAVERN_LAYER = -10;
 
     private MusicSound getReplacedMusicType() {
         if (this.currentScreen instanceof CreditsScreen) {
