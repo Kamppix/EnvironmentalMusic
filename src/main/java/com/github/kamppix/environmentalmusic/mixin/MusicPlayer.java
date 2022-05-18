@@ -27,31 +27,56 @@ public class MusicPlayer {
     private void tick(CallbackInfo info) {
         MusicSound currentType = this.client.getMusicType();
 
-        if (!this.playingMusic.containsKey(currentType)) {
-            this.play(currentType, info);
-        }
-
-        for (Iterator<Map.Entry<MusicSound, MusicSoundInstance>> itr = playingMusic.entrySet().iterator(); itr.hasNext();) {
-            Map.Entry<MusicSound, MusicSoundInstance> entry = itr.next();
-            MusicSound type = entry.getKey();
-
-            if (!this.client.getSoundManager().isPlaying(playingMusic.get(type))) {
-                this.playingMusic.remove(type);
-                continue;
+        if (currentType != null) {
+            if (currentType == ModMusicTypes.NONE) {
+                if (this.playingMusic.isEmpty()) {
+                    currentType = ModMusicTypes.OVERWORLD_DAY;
+                } else {
+                    currentType = getMaxVolumeMusicType();
+                }
             }
 
-            if (type == currentType) {
-                playingMusic.get(type).setVolume(Math.min(1.0f, playingMusic.get(type).getVolume() + 0.012375f));
-            } else {
-                playingMusic.get(type).setVolume(Math.max(0.01f, playingMusic.get(type).getVolume() - 0.012375f));
-                if (playingMusic.get(type).getVolume() == 0.01f) {
-                    this.client.getSoundManager().stop(playingMusic.get(type));
-                    this.playingMusic.remove(type);
+            if (!this.playingMusic.containsKey(currentType)) {
+                this.play(currentType, info);
+            }
+
+            Iterator<Map.Entry<MusicSound, MusicSoundInstance>> itr = playingMusic.entrySet().iterator();
+            while (itr.hasNext()) {
+                Map.Entry<MusicSound, MusicSoundInstance> entry = itr.next();
+                MusicSound type = entry.getKey();
+                MusicSoundInstance instance = entry.getValue();
+
+                if (!this.client.getSoundManager().isPlaying(instance)) {
+                    itr.remove();
+                    continue;
+                }
+
+                if (type == currentType) {
+                    instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
+                } else {
+                    instance.setVolume(Math.max(0.01f, instance.getVolume() - 0.012375f));
+                    if (instance.getVolume() == 0.01f) {
+                        this.client.getSoundManager().stop(instance);
+                        itr.remove();
+                    }
                 }
             }
         }
 
         info.cancel();
+    }
+
+    private MusicSound getMaxVolumeMusicType() {
+        Map.Entry<MusicSound, MusicSoundInstance> maxEntry = null;
+
+        for (Map.Entry<MusicSound, MusicSoundInstance> entry : playingMusic.entrySet()) {
+            if (maxEntry == null || entry.getValue().getVolume() > maxEntry.getValue().getVolume()) {
+                maxEntry = entry;
+            }
+        }
+
+        assert maxEntry != null;
+        return maxEntry.getKey();
     }
 
     @Inject(method = "play", at = @At("HEAD"), cancellable = true)
@@ -70,13 +95,13 @@ public class MusicPlayer {
 
     @Inject(method = "stop", at = @At("HEAD"), cancellable = true)
     private void stop(CallbackInfo info) {
-        for (Iterator<Map.Entry<MusicSound, MusicSoundInstance>> itr = playingMusic.entrySet().iterator(); itr.hasNext();) {
+        Iterator<Map.Entry<MusicSound, MusicSoundInstance>> itr = playingMusic.entrySet().iterator();
+        while (itr.hasNext()) {
             Map.Entry<MusicSound, MusicSoundInstance> entry = itr.next();
-            MusicSound type = entry.getKey();
             MusicSoundInstance instance = entry.getValue();
 
             this.client.getSoundManager().stop(instance);
-            this.playingMusic.remove(type);
+            itr.remove();
         }
 
         info.cancel();
