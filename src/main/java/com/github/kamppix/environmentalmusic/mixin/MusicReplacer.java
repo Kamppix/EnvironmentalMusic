@@ -4,11 +4,11 @@ import com.github.kamppix.environmentalmusic.sound.ModMusicTypes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.CreditsScreen;
-import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.MusicSound;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.registry.RegistryEntry;
@@ -21,12 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
-public class MusicReplacer {
-    @Inject(method = "getMusicType()Lnet/minecraft/sound/MusicSound;", at = @At("HEAD"), cancellable = true)
-    private void replaceMusicType(CallbackInfoReturnable<MusicSound> info) {
-        info.setReturnValue(getReplacedMusicType());
-    }
-
+public class MusicReplacer implements IMusicReplacer {
     @Shadow
     private Screen currentScreen;
     @Shadow
@@ -37,6 +32,11 @@ public class MusicReplacer {
     private static final int SPACE_LAYER = 200;
     private static final int UNDERGROUND_LAYER = 40;
     private static final int CAVERN_LAYER = -10;
+
+    @Inject(method = "getMusicType()Lnet/minecraft/sound/MusicSound;", at = @At("HEAD"), cancellable = true)
+    private void getMusicType(CallbackInfoReturnable<MusicSound> info) {
+        info.setReturnValue(getReplacedMusicType());
+    }
 
     private MusicSound getReplacedMusicType() {
         if (this.currentScreen instanceof CreditsScreen) {
@@ -76,15 +76,9 @@ public class MusicReplacer {
 
                 BlockPos playerPos = this.player.getBlockPos();
                 int playerDepth = 0;
-                if (playerPos.getY() < SPACE_LAYER) {
-                    playerDepth++;
-                }
-                if (playerPos.getY() < UNDERGROUND_LAYER) {
-                    playerDepth++;
-                }
-                if (playerPos.getY() < CAVERN_LAYER) {
-                    playerDepth++;
-                }
+                if (playerPos.getY() < SPACE_LAYER) playerDepth++;
+                if (playerPos.getY() < UNDERGROUND_LAYER) playerDepth++;
+                if (playerPos.getY() < CAVERN_LAYER) playerDepth++;
 
                 switch (playerDepth) {
                     case 0:
@@ -110,6 +104,7 @@ public class MusicReplacer {
                 }
 
                 // village, raid, mansion, monument, stronghold
+
                 if (this.inGameHud.getBossBarHud().shouldPlayDragonMusic()) {
                     musicType = ModMusicTypes.DRAGON;
                 } else if (this.inGameHud.getBossBarHud().shouldDarkenSky()) {
@@ -120,5 +115,12 @@ public class MusicReplacer {
             return musicType;
         }
         return ModMusicTypes.MENU;
+    }
+
+    public MusicSound getMusicTypeDefault() {
+        long daytime = this.player.world.getTimeOfDay();
+        boolean isDay = daytime < 13050 || daytime >= 23450;
+
+        return isDay ? ModMusicTypes.OVERWORLD_DAY : ModMusicTypes.OVERWORLD_NIGHT;
     }
 }

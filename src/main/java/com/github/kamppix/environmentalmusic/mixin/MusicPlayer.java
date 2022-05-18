@@ -29,8 +29,8 @@ public class MusicPlayer {
 
         if (currentType != null) {
             if (currentType == ModMusicTypes.NONE) {
-                if (this.playingMusic.isEmpty()) {
-                    currentType = ModMusicTypes.OVERWORLD_DAY;
+                if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicTypes.RAIN_DAY || getMaxVolumeMusicType() == ModMusicTypes.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicTypes.THUNDER || getMaxVolumeMusicType() == ModMusicTypes.WITHER) {
+                    currentType = ((IMusicReplacer) this.client).getMusicTypeDefault();
                 } else {
                     currentType = getMaxVolumeMusicType();
                 }
