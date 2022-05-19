@@ -6,8 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "MusicReplacer",
-    "MusicPlayer"
+    "MixinMusicTracker",
+    "MixinMusicReplacer",
+    "MixinBossBarHud"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -5,7 +5,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class ModSounds {
+public class ModSoundEvents {
     public static final SoundEvent MUSIC_MENU = registerSoundEvent("music.menu");
     public static final SoundEvent MUSIC_OVERWORLD_DAY = registerSoundEvent("music.overworld_day");
     public static final SoundEvent MUSIC_OVERWORLD_NIGHT = registerSoundEvent("music.overworld_night");
@@ -35,6 +35,9 @@ public class ModSounds {
     public static final SoundEvent MUSIC_END = registerSoundEvent("music.end");
     public static final SoundEvent MUSIC_DRAGON = registerSoundEvent("music.dragon");
     public static final SoundEvent MUSIC_CREDITS = registerSoundEvent("music.credits");
+    public static final SoundEvent MUSIC_CRIMSON_FOREST = registerSoundEvent("music.crimson_forest");
+    public static final SoundEvent MUSIC_WARPED_FOREST = registerSoundEvent("music.warped_forest");
+    public static final SoundEvent MUSIC_SOUL_SAND_VALLEY = registerSoundEvent("music.soul_sand_valley");
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = new Identifier(EnvironmentalMusic.MOD_ID, name);
