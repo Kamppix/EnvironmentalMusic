@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MusicTracker;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.sound.MusicSound;
+import net.minecraft.sound.SoundCategory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,47 +26,52 @@ public class MusicPlayer {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void tick(CallbackInfo info) {
-        MusicSound currentType = this.client.getMusicType();
+        if (this.client.options.getSoundVolume(SoundCategory.MUSIC) == 0.0f) {
+            stop(info);
 
-        if (currentType != null) {
-            boolean dipVolume = currentType == ModMusicTypes.WARDEN;
+        } else {
+            MusicSound currentType = this.client.getMusicType();
 
-            if (currentType == ModMusicTypes.NONE || currentType == ModMusicTypes.WARDEN) {
-                if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicTypes.RAIN_DAY || getMaxVolumeMusicType() == ModMusicTypes.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicTypes.THUNDER || getMaxVolumeMusicType() == ModMusicTypes.WITHER) {
-                    currentType = null; //((IMusicReplacer) this.client).getMusicTypeDefault();
-                } else {
-                    currentType = getMaxVolumeMusicType();
-                }
-            }
+            if (currentType != null) {
+                boolean dipVolume = currentType == ModMusicTypes.WARDEN;
 
-            if (!this.playingMusic.containsKey(currentType)) {
-                this.play(currentType, info);
-            }
-
-            Iterator<Map.Entry<MusicSound, MusicSoundInstance>> itr = playingMusic.entrySet().iterator();
-            while (itr.hasNext()) {
-                Map.Entry<MusicSound, MusicSoundInstance> entry = itr.next();
-                MusicSound type = entry.getKey();
-                MusicSoundInstance instance = entry.getValue();
-
-                this.client.getSoundManager().resumeAll();
-
-                if (!this.client.getSoundManager().isPlaying(instance)) {
-                    itr.remove();
-                    continue;
-                }
-
-                if (type == currentType) {
-                    if (dipVolume) {
-                        instance.setVolume(Math.max(0.1f, instance.getVolume() - 0.012375f));
+                if (currentType == ModMusicTypes.NONE || currentType == ModMusicTypes.WARDEN) {
+                    if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicTypes.RAIN_DAY || getMaxVolumeMusicType() == ModMusicTypes.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicTypes.THUNDER || getMaxVolumeMusicType() == ModMusicTypes.WITHER) {
+                        currentType = null; //((IMusicReplacer) this.client).getMusicTypeDefault();
                     } else {
-                        instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
+                        currentType = getMaxVolumeMusicType();
                     }
-                } else {
-                    instance.setVolume(Math.max(0.01f, instance.getVolume() - 0.012375f));
-                    if (instance.getVolume() == 0.01f) {
-                        this.client.getSoundManager().stop(instance);
+                }
+
+                if (!this.playingMusic.containsKey(currentType)) {
+                    this.play(currentType, info);
+                }
+
+                Iterator<Map.Entry<MusicSound, MusicSoundInstance>> itr = playingMusic.entrySet().iterator();
+                while (itr.hasNext()) {
+                    Map.Entry<MusicSound, MusicSoundInstance> entry = itr.next();
+                    MusicSound type = entry.getKey();
+                    MusicSoundInstance instance = entry.getValue();
+
+                    this.client.getSoundManager().resumeAll();
+
+                    if (!this.client.getSoundManager().isPlaying(instance)) {
                         itr.remove();
+                        continue;
+                    }
+
+                    if (type == currentType) {
+                        if (dipVolume) {
+                            instance.setVolume(Math.max(0.1f, instance.getVolume() - 0.012375f));
+                        } else {
+                            instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
+                        }
+                    } else {
+                        instance.setVolume(Math.max(0.01f, instance.getVolume() - 0.012375f));
+                        if (instance.getVolume() == 0.01f) {
+                            this.client.getSoundManager().stop(instance);
+                            itr.remove();
+                        }
                     }
                 }
             }
