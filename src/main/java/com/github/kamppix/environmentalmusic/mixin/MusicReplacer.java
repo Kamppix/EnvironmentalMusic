@@ -66,7 +66,8 @@ public class MusicReplacer /*implements MusicReplacerAccess*/ {
             MusicSound musicType = null;
 
             if (this.player.world.getChunkManager().isChunkLoaded(ChunkSectionPos.getSectionCoord(this.player.getBlockPos().getX()), ChunkSectionPos.getSectionCoord(this.player.getBlockPos().getZ()))) {
-                RegistryEntry<Biome> biome = this.player.world.getBiome(this.player.getBlockPos());
+                BlockPos playerPos = this.player.getBlockPos();
+                RegistryEntry<Biome> biome = this.player.world.getBiome(playerPos);
 
                 long daytime = this.player.world.getTimeOfDay();
                 boolean isDay = daytime < 13050 || daytime >= 23450;
@@ -100,7 +101,6 @@ public class MusicReplacer /*implements MusicReplacerAccess*/ {
                     musicType = isDay ? ModMusicTypes.OVERWORLD_DAY : ModMusicTypes.OVERWORLD_NIGHT;
                 }
 
-                BlockPos playerPos = this.player.getBlockPos();
                 int playerDepth = 0;
                 if (playerPos.getY() <= SPACE_LAYER) playerDepth++;
                 if (playerPos.getY() <= UNDERGROUND_LAYER) playerDepth++;
