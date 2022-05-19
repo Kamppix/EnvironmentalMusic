@@ -22,8 +22,8 @@ public class ModMusicTypes {
     public static final MusicSound VILLAGE_NIGHT = new MusicSound(ModSounds.MUSIC_VILLAGE_NIGHT, 0, 0, false);
     public static final MusicSound RAID = new MusicSound(ModSounds.MUSIC_RAID, 0, 0, false);
     public static final MusicSound UNDERGROUND = new MusicSound(ModSounds.MUSIC_UNDERGROUND, 0, 0, false);
-    public static final MusicSound CAVERN = new MusicSound(ModSounds.MUSIC_CAVERN, 0, 0, false);
     public static final MusicSound LUSH_CAVES = new MusicSound(ModSounds.MUSIC_LUSH_CAVES, 0, 0, false);
+    public static final MusicSound DEEP_DARK = new MusicSound(ModSounds.MUSIC_DEEP_DARK, 0, 0, false);
     public static final MusicSound MANSION = new MusicSound(ModSounds.MUSIC_MANSION, 0, 0, false);
     public static final MusicSound MONUMENT = new MusicSound(ModSounds.MUSIC_MONUMENT, 0, 0, false);
     public static final MusicSound STRONGHOLD = new MusicSound(ModSounds.MUSIC_STRONGHOLD, 0, 0, false);
@@ -33,5 +33,6 @@ public class ModMusicTypes {
     public static final MusicSound DRAGON = new MusicSound(ModSounds.MUSIC_DRAGON, 0, 0, false);
     public static final MusicSound CREDITS = new MusicSound(ModSounds.MUSIC_CREDITS, 0, 0, false);
 
+    public static final MusicSound WARDEN = new MusicSound(null, 0, 0, false);
     public static final MusicSound NONE = new MusicSound(null, 0, 0, false);
 }
