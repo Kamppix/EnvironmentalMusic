@@ -21,16 +21,18 @@ import java.util.Map;
 public class MusicPlayer {
     @Shadow
     private MinecraftClient client;
-    private HashMap<MusicSound, MusicSoundInstance> playingMusic = new HashMap<>();
+    private final HashMap<MusicSound, MusicSoundInstance> playingMusic = new HashMap<>();
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void tick(CallbackInfo info) {
         MusicSound currentType = this.client.getMusicType();
 
         if (currentType != null) {
-            if (currentType == ModMusicTypes.NONE) {
+            boolean dipVolume = currentType == ModMusicTypes.WARDEN;
+
+            if (currentType == ModMusicTypes.NONE || currentType == ModMusicTypes.WARDEN) {
                 if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicTypes.RAIN_DAY || getMaxVolumeMusicType() == ModMusicTypes.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicTypes.THUNDER || getMaxVolumeMusicType() == ModMusicTypes.WITHER) {
-                    currentType = ((IMusicReplacer) this.client).getMusicTypeDefault();
+                    currentType = null; //((IMusicReplacer) this.client).getMusicTypeDefault();
                 } else {
                     currentType = getMaxVolumeMusicType();
                 }
@@ -46,13 +48,19 @@ public class MusicPlayer {
                 MusicSound type = entry.getKey();
                 MusicSoundInstance instance = entry.getValue();
 
+                this.client.getSoundManager().resumeAll();
+
                 if (!this.client.getSoundManager().isPlaying(instance)) {
                     itr.remove();
                     continue;
                 }
 
                 if (type == currentType) {
-                    instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
+                    if (dipVolume) {
+                        instance.setVolume(Math.max(0.1f, instance.getVolume() - 0.012375f));
+                    } else {
+                        instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
+                    }
                 } else {
                     instance.setVolume(Math.max(0.01f, instance.getVolume() - 0.012375f));
                     if (instance.getVolume() == 0.01f) {
@@ -75,8 +83,8 @@ public class MusicPlayer {
             }
         }
 
-        assert maxEntry != null;
-        return maxEntry.getKey();
+        if (maxEntry != null) return maxEntry.getKey();
+        else return null;
     }
 
     @Inject(method = "play", at = @At("HEAD"), cancellable = true)

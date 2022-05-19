@@ -25,8 +25,8 @@ public class ModSounds {
     public static final SoundEvent MUSIC_VILLAGE_NIGHT = registerSoundEvent("music.village_night");
     public static final SoundEvent MUSIC_RAID = registerSoundEvent("music.raid");
     public static final SoundEvent MUSIC_UNDERGROUND = registerSoundEvent("music.underground");
-    public static final SoundEvent MUSIC_CAVERN = registerSoundEvent("music.cavern");
     public static final SoundEvent MUSIC_LUSH_CAVES = registerSoundEvent("music.lush_caves");
+    public static final SoundEvent MUSIC_DEEP_DARK = registerSoundEvent("music.deep_dark");
     public static final SoundEvent MUSIC_MANSION = registerSoundEvent("music.mansion");
     public static final SoundEvent MUSIC_MONUMENT = registerSoundEvent("music.monument");
     public static final SoundEvent MUSIC_STRONGHOLD = registerSoundEvent("music.stronghold");
