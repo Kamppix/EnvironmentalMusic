@@ -1,12 +1,19 @@
 package com.github.kamppix.environmentalmusic.mixin;
 
-import com.github.kamppix.environmentalmusic.sound.ModMusicTypes;
+import com.github.kamppix.environmentalmusic.access.IMixinMusicReplacer;
+import com.github.kamppix.environmentalmusic.sound.ModMusicType;
 import com.github.kamppix.environmentalmusic.sound.MusicSoundInstance;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MusicTracker;
 import net.minecraft.client.sound.SoundManager;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.sound.MusicSound;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,10 +23,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Mixin(MusicTracker.class)
-public class MusicPlayer {
+public class MixinMusicTracker {
     @Shadow
     private MinecraftClient client;
     private final HashMap<MusicSound, MusicSoundInstance> playingMusic = new HashMap<>();
@@ -33,13 +41,13 @@ public class MusicPlayer {
             MusicSound currentType = this.client.getMusicType();
 
             if (currentType != null) {
-                boolean dipVolume = currentType == ModMusicTypes.WARDEN;
-
-                if (currentType == ModMusicTypes.NONE || currentType == ModMusicTypes.WARDEN) {
-                    if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicTypes.RAIN_DAY || getMaxVolumeMusicType() == ModMusicTypes.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicTypes.THUNDER || getMaxVolumeMusicType() == ModMusicTypes.WITHER) {
-                        currentType = null; //((IMusicReplacer) this.client).getMusicTypeDefault();
+                if (currentType == ModMusicType.NONE) {
+                    if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicType.RAIN_DAY || getMaxVolumeMusicType() == ModMusicType.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicType.THUNDER || getMaxVolumeMusicType() == ModMusicType.WITHER) {
+                        currentType = ((IMixinMusicReplacer) (Object) this.client).getMusicTypeDefault();
                     } else {
                         currentType = getMaxVolumeMusicType();
+                        MusicSound updatedType = ((IMixinMusicReplacer) (Object) this.client).updateNoneMusicType(currentType);
+                        if (updatedType != null) currentType = updatedType;
                     }
                 }
 
@@ -61,8 +69,8 @@ public class MusicPlayer {
                     }
 
                     if (type == currentType) {
-                        if (dipVolume) {
-                            instance.setVolume(Math.max(0.1f, instance.getVolume() - 0.012375f));
+                        if (shouldDipMusicVolume(currentType)) {
+                            instance.setVolume(Math.max(0.069f, instance.getVolume() - 0.012375f));
                         } else {
                             instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
                         }
@@ -78,6 +86,19 @@ public class MusicPlayer {
         }
 
         info.cancel();
+    }
+
+    private boolean shouldDipMusicVolume(MusicSound currentType) {
+        if (this.client.player != null && currentType != ModMusicType.RAID && currentType != ModMusicType.WITHER && currentType != ModMusicType.DRAGON) {
+            BlockPos playerPos = this.client.player.getBlockPos();
+            List<WardenEntity> nearbyWardens = this.client.player.world.getEntitiesByType(EntityType.WARDEN, new Box(playerPos.subtract(new Vec3i(64, 64, 64)), playerPos.add(new Vec3i(64, 64, 64))), EntityPredicates.VALID_LIVING_ENTITY);
+
+            for (WardenEntity warden : nearbyWardens) {
+                if (this.client.player.distanceTo(warden) <= 64) return true;
+            }
+        }
+
+        return false;
     }
 
     private MusicSound getMaxVolumeMusicType() {
@@ -99,7 +120,7 @@ public class MusicPlayer {
         instance.getSoundSet(this.client.getSoundManager());
 
         if (instance.getSound() != SoundManager.MISSING_SOUND) {
-            if (type != ModMusicTypes.MENU) instance.setVolume(0.01f);
+            if (type != ModMusicType.MENU) instance.setVolume(0.01f);
             this.playingMusic.put(type, instance);
             this.client.getSoundManager().play(instance);
         }
