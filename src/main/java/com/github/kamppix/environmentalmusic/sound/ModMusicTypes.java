@@ -2,7 +2,7 @@ package com.github.kamppix.environmentalmusic.sound;
 
 import net.minecraft.sound.MusicSound;
 
-public class ModMusicType {
+public class ModMusicTypes {
     public static final MusicSound MENU = new MusicSound(ModSoundEvents.MUSIC_MENU, 0, 0, false);
     public static final MusicSound OVERWORLD_DAY = new MusicSound(ModSoundEvents.MUSIC_OVERWORLD_DAY, 0, 0, false);
     public static final MusicSound OVERWORLD_NIGHT = new MusicSound(ModSoundEvents.MUSIC_OVERWORLD_NIGHT, 0, 0, false);
@@ -24,9 +24,8 @@ public class ModMusicType {
     public static final MusicSound UNDERGROUND = new MusicSound(ModSoundEvents.MUSIC_UNDERGROUND, 0, 0, false);
     public static final MusicSound LUSH_CAVES = new MusicSound(ModSoundEvents.MUSIC_LUSH_CAVES, 0, 0, false);
     public static final MusicSound DEEP_DARK = new MusicSound(ModSoundEvents.MUSIC_DEEP_DARK, 0, 0, false);
-    public static final MusicSound MANSION = new MusicSound(ModSoundEvents.MUSIC_MANSION, 0, 0, false);
     public static final MusicSound MONUMENT = new MusicSound(ModSoundEvents.MUSIC_MONUMENT, 0, 0, false);
-    public static final MusicSound STRONGHOLD = new MusicSound(ModSoundEvents.MUSIC_STRONGHOLD, 0, 0, false);
+    public static final MusicSound END_CITY = new MusicSound(ModSoundEvents.MUSIC_END_CITY, 0, 0, false);
     public static final MusicSound NETHER = new MusicSound(ModSoundEvents.MUSIC_NETHER, 0, 0, false);
     public static final MusicSound CRIMSON_FOREST = new MusicSound(ModSoundEvents.MUSIC_CRIMSON_FOREST, 0, 0, false);
     public static final MusicSound WARPED_FOREST = new MusicSound(ModSoundEvents.MUSIC_WARPED_FOREST, 0, 0, false);

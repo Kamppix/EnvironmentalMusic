@@ -27,9 +27,8 @@ public class ModSoundEvents {
     public static final SoundEvent MUSIC_UNDERGROUND = registerSoundEvent("music.underground");
     public static final SoundEvent MUSIC_LUSH_CAVES = registerSoundEvent("music.lush_caves");
     public static final SoundEvent MUSIC_DEEP_DARK = registerSoundEvent("music.deep_dark");
-    public static final SoundEvent MUSIC_MANSION = registerSoundEvent("music.mansion");
     public static final SoundEvent MUSIC_MONUMENT = registerSoundEvent("music.monument");
-    public static final SoundEvent MUSIC_STRONGHOLD = registerSoundEvent("music.stronghold");
+    public static final SoundEvent MUSIC_END_CITY = registerSoundEvent("music.end_city");
     public static final SoundEvent MUSIC_NETHER = registerSoundEvent("music.nether");
     public static final SoundEvent MUSIC_WITHER = registerSoundEvent("music.wither");
     public static final SoundEvent MUSIC_END = registerSoundEvent("music.end");
