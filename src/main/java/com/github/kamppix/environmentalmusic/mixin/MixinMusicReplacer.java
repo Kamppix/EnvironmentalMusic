@@ -74,7 +74,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                 } else if (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_NETHER))) {
                     musicType = ModMusicTypes.NETHER;
                 } else if (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_END))) {
-                    musicType = ModMusicTypes.END;
+                    musicType = ModMusicTypes.THE_END;
                 } else if (biome.matchesKey(BiomeKeys.BEACH) || (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_OCEAN)) && !biome.matchesKey(BiomeKeys.FROZEN_OCEAN) || biome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN))) {
                     musicType = isDay ? ModMusicTypes.OCEAN_DAY : ModMusicTypes.OCEAN_NIGHT;
                 } else if (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_JUNGLE))) {
@@ -84,7 +84,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                 } else if (biome.value().getTemperature() <= 0.0f || biome.matchesKey(BiomeKeys.SNOWY_BEACH) || biome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN)) {
                     musicType = ModMusicTypes.SNOW;
                 } else if (biome.matchesKey(BiomeKeys.MUSHROOM_FIELDS)) {
-                    musicType = ModMusicTypes.MUSHROOM;
+                    musicType = ModMusicTypes.MUSHROOM_FIELDS;
                 } else if (biome.matchesKey(BiomeKeys.LUSH_CAVES)) {
                     musicType = ModMusicTypes.LUSH_CAVES;
                 } else if(biome.matchesKey(BiomeKeys.DEEP_DARK)) {
@@ -122,13 +122,13 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                             villagersInRange++;
                         }
                     }
-                    if (villagersInRange > 2 && musicType != ModMusicTypes.MUSHROOM) musicType = isDay ? ModMusicTypes.VILLAGE_DAY : ModMusicTypes.VILLAGE_NIGHT;
+                    if (villagersInRange > 2 && musicType != ModMusicTypes.MUSHROOM_FIELDS) musicType = isDay ? ModMusicTypes.VILLAGE_DAY : ModMusicTypes.VILLAGE_NIGHT;
 
                     List<GuardianEntity> nearbyGuardians = this.player.world.getEntitiesByType(EntityType.GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
                     nearbyGuardians.addAll(this.player.world.getEntitiesByType(EntityType.ELDER_GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY));
                     for (GuardianEntity guardian : nearbyGuardians) {
                         if (this.player.distanceTo(guardian) <= 40) {
-                            musicType = ModMusicTypes.MONUMENT;
+                            musicType = ModMusicTypes.OCEAN_MONUMENT;
                             break;
                         }
                     }
@@ -152,7 +152,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                 }
 
                 if (this.inGameHud.getBossBarHud().shouldPlayDragonMusic()) {
-                    musicType = ModMusicTypes.DRAGON;
+                    musicType = ModMusicTypes.ENDER_DRAGON;
                 } else if (this.inGameHud.getBossBarHud().shouldDarkenSky()) {
                     musicType = ModMusicTypes.WITHER;
                 } else if (((IMixinBossBarHud) (Object) this.inGameHud.getBossBarHud()).shouldPlayRaidMusic()) {
