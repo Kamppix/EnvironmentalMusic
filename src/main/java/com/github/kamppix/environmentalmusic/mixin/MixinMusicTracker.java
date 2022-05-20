@@ -89,7 +89,7 @@ public class MixinMusicTracker {
     }
 
     private boolean shouldDipMusicVolume(MusicSound currentType) {
-        if (this.client.player != null && currentType != ModMusicTypes.RAID && currentType != ModMusicTypes.WITHER && currentType != ModMusicTypes.DRAGON) {
+        if (this.client.player != null && currentType != ModMusicTypes.RAID && currentType != ModMusicTypes.WITHER && currentType != ModMusicTypes.ENDER_DRAGON) {
             BlockPos playerPos = this.client.player.getBlockPos();
             List<WardenEntity> nearbyWardens = this.client.player.world.getEntitiesByType(EntityType.WARDEN, new Box(playerPos.subtract(new Vec3i(64, 64, 64)), playerPos.add(new Vec3i(64, 64, 64))), EntityPredicates.VALID_LIVING_ENTITY);
 
