@@ -45,6 +45,6 @@ public class ModSoundEvents {
     }
 
     public static void registerModSounds() {
-        EnvironmentalMusic.LOGGER.info("Registering ModSounds for " + EnvironmentalMusic.MOD_ID);
+        EnvironmentalMusic.LOGGER.info("Registering ModSoundEvents for " + EnvironmentalMusic.MOD_ID);
     }
 }

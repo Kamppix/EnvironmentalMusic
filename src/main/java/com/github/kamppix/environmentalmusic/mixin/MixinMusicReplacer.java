@@ -9,7 +9,7 @@ import net.minecraft.client.gui.screen.CreditsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.mob.GuardianEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.sound.MusicSound;
@@ -21,7 +21,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -115,14 +114,23 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                             break;
                     }
 
-                    List<VillagerEntity> nearbyVillagers = this.player.world.getEntitiesByType(EntityType.VILLAGER, new Box(playerPos.subtract(new Vec3i(64, 64, 64)), playerPos.add(new Vec3i(64, 64, 64))), EntityPredicates.VALID_LIVING_ENTITY);
+                    List<VillagerEntity> nearbyVillagers = this.player.world.getEntitiesByType(EntityType.VILLAGER, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
                     int villagersInRange = 0;
                     for (VillagerEntity villager : nearbyVillagers) {
-                        if (this.player.distanceTo(villager) <= 48) {
+                        if (this.player.distanceTo(villager) <= 40) {
                             villagersInRange++;
                         }
                     }
                     if (villagersInRange > 2 && musicType != ModMusicType.MUSHROOM) musicType = isDay ? ModMusicType.VILLAGE_DAY : ModMusicType.VILLAGE_NIGHT;
+
+                    List<GuardianEntity> nearbyGuardians = this.player.world.getEntitiesByType(EntityType.GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
+                    nearbyGuardians.addAll(this.player.world.getEntitiesByType(EntityType.ELDER_GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY));
+                    for (GuardianEntity guardian : nearbyGuardians) {
+                        if (this.player.distanceTo(guardian) <= 40) {
+                            musicType = ModMusicType.MONUMENT;
+                            break;
+                        }
+                    }
 
                     if (playerDepth == 1) {
                         if (this.player.world.isThundering() && (musicType == ModMusicType.NONE || musicType == ModMusicType.OVERWORLD_DAY || musicType == ModMusicType.OVERWORLD_NIGHT || musicType == ModMusicType.OCEAN_DAY || musicType == ModMusicType.OCEAN_NIGHT || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_JUNGLE)))) {
