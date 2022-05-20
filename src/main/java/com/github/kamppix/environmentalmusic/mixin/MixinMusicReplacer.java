@@ -100,7 +100,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
 
                     switch (playerDepth) {
                         case 0:
-                            musicType = isDay ? ModMusicType.SPACE_DAY : ModMusicType.SPACE_NIGHT;
+                            musicType = isDay ? ModMusicType.SKY_DAY : ModMusicType.SKY_NIGHT;
                             break;
                         case 2:
                             if (biome.streamTags().noneMatch(Predicate.isEqual(BiomeTags.IS_OCEAN)) && musicType != ModMusicType.LUSH_CAVES && musicType != ModMusicType.DEEP_DARK) {
@@ -163,7 +163,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
     @Override
     public MusicSound updateNoneMusicType(MusicSound type) {
         boolean isDay = isDayMusic();
-        if (type == ModMusicType.OVERWORLD_DAY || type == ModMusicType.OVERWORLD_NIGHT || type == ModMusicType.SPACE_DAY || type == ModMusicType.SPACE_NIGHT || type == ModMusicType.UNDERGROUND || type == ModMusicType.LUSH_CAVES || type == ModMusicType.DEEP_DARK || type == ModMusicType.RAIN_DAY || type == ModMusicType.RAIN_NIGHT || type == ModMusicType.THUNDER || type == ModMusicType.VILLAGE_DAY || type == ModMusicType.VILLAGE_NIGHT || type == ModMusicType.RAID || type == ModMusicType.WITHER) {
+        if (type == ModMusicType.OVERWORLD_DAY || type == ModMusicType.OVERWORLD_NIGHT || type == ModMusicType.SKY_DAY || type == ModMusicType.SKY_NIGHT || type == ModMusicType.UNDERGROUND || type == ModMusicType.LUSH_CAVES || type == ModMusicType.DEEP_DARK || type == ModMusicType.RAIN_DAY || type == ModMusicType.RAIN_NIGHT || type == ModMusicType.THUNDER || type == ModMusicType.VILLAGE_DAY || type == ModMusicType.VILLAGE_NIGHT || type == ModMusicType.RAID || type == ModMusicType.WITHER) {
             return isDay ? ModMusicType.OVERWORLD_DAY : ModMusicType.OVERWORLD_NIGHT;
         }
         if (type == ModMusicType.OCEAN_DAY || type == ModMusicType.OCEAN_NIGHT) return isDay ? ModMusicType.OCEAN_DAY : ModMusicType.OCEAN_NIGHT;

@@ -13,8 +13,8 @@ public class ModSoundEvents {
     public static final SoundEvent MUSIC_OCEAN_NIGHT = registerSoundEvent("music.ocean_night");
     public static final SoundEvent MUSIC_JUNGLE_DAY = registerSoundEvent("music.jungle_day");
     public static final SoundEvent MUSIC_JUNGLE_NIGHT = registerSoundEvent("music.jungle_night");
-    public static final SoundEvent MUSIC_SPACE_DAY = registerSoundEvent("music.space_day");
-    public static final SoundEvent MUSIC_SPACE_NIGHT = registerSoundEvent("music.space_night");
+    public static final SoundEvent MUSIC_SKY_DAY = registerSoundEvent("music.sky_day");
+    public static final SoundEvent MUSIC_SKY_NIGHT = registerSoundEvent("music.sky_night");
     public static final SoundEvent MUSIC_RAIN_DAY = registerSoundEvent("music.rain_day");
     public static final SoundEvent MUSIC_RAIN_NIGHT = registerSoundEvent("music.rain_night");
     public static final SoundEvent MUSIC_THUNDER = registerSoundEvent("music.thunder");
