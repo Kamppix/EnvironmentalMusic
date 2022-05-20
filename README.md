@@ -4,7 +4,7 @@ A Fabric mod for Minecraft that replaces the game's music system with an environ
 
 ## Usage
 
-To install the mod, you must first install [Fabric](https://fabricmc.net/use/installer/). After installing Fabric, place the mod JAR file in `.minecraft/mods` and the mod will be installed.
+To install the mod, you must first install [Fabric](https://fabricmc.net/use/installer/). After installing Fabric, download the mod and [Fabric API](https://github.com/FabricMC/fabric/releases). Place the downloaded JAR files in `.minecraft/mods` and the mod will be installed.
 
 [Where is .minecraft?](https://minecraft.fandom.com/wiki/.minecraft#Locating_.minecraft)
 
@@ -17,5 +17,5 @@ Music packs are placed in the same directory as any other resource packs, `.mine
 #### To create a music pack:
 
 1. Download the music pack template provided with your version of the mod
-2. Place your **OGG** music files in `assets/environmentalmusic/sounds` (filenames must consist of [a-z0-9/.\_-])
-3. Insert your music filenames into `sounds.json` as follows: `"name": "environmentalmusic:<filename without .ogg>"`
+2. Place the OGG music files in `assets/environmentalmusic/sounds` (filenames must consist of [a-z0-9/.\_-])
+3. Insert the music filenames into `sounds.json` as follows: `"name": "environmentalmusic:[filename without .ogg]"`
