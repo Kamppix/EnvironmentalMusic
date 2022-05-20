@@ -41,11 +41,12 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
     @Shadow
     private InGameHud inGameHud;
 
-    private static final int SPACE_LAYER = 200;
+    private static final int SKY_LAYER = 200;
     private static final int UNDERGROUND_LAYER = 40;
     private static final int CAVERN_LAYER = -10;
 
-    @Inject(method = "getMusicType()Lnet/minecraft/sound/MusicSound", at = @At("HEAD"), cancellable = true)
+    @SuppressWarnings("all")
+    @Inject(method = "getMusicType()Lnet/minecraft/sound/MusicSound;", at = @At("HEAD"), cancellable = true)
     private void getMusicType(CallbackInfoReturnable<MusicSound> info) {
         info.setReturnValue(getReplacedMusicType());
     }
@@ -81,7 +82,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                     musicType = isDay ? ModMusicTypes.JUNGLE_DAY : ModMusicTypes.JUNGLE_NIGHT;
                 } else if (biome.matchesKey(BiomeKeys.DESERT) || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_SAVANNA)) || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_BADLANDS))) {
                     musicType = ModMusicTypes.DESERT;
-                } else if (biome.value().getTemperature() <= 0.0f || biome.matchesKey(BiomeKeys.SNOWY_BEACH) || biome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN)) {
+                } else if (biome.value().getTemperature() <= 0.0F || biome.matchesKey(BiomeKeys.SNOWY_BEACH) || biome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN)) {
                     musicType = ModMusicTypes.SNOW;
                 } else if (biome.matchesKey(BiomeKeys.MUSHROOM_FIELDS)) {
                     musicType = ModMusicTypes.MUSHROOM_FIELDS;
@@ -95,7 +96,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
 
                 if (this.player.world.getDimensionKey() == DimensionTypes.OVERWORLD) {
                     int playerDepth = 0;
-                    if (playerPos.getY() <= SPACE_LAYER) playerDepth++;
+                    if (playerPos.getY() <= SKY_LAYER) playerDepth++;
                     if (playerPos.getY() <= UNDERGROUND_LAYER) playerDepth++;
                     if (playerPos.getY() <= CAVERN_LAYER) playerDepth++;
 
@@ -118,7 +119,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                     List<VillagerEntity> nearbyVillagers = this.player.world.getEntitiesByType(EntityType.VILLAGER, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
                     int villagersInRange = 0;
                     for (VillagerEntity villager : nearbyVillagers) {
-                        if (this.player.distanceTo(villager) <= 40) {
+                        if (this.player.distanceTo(villager) <= 40.0F) {
                             villagersInRange++;
                         }
                     }
@@ -127,7 +128,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                     List<GuardianEntity> nearbyGuardians = this.player.world.getEntitiesByType(EntityType.GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
                     nearbyGuardians.addAll(this.player.world.getEntitiesByType(EntityType.ELDER_GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY));
                     for (GuardianEntity guardian : nearbyGuardians) {
-                        if (this.player.distanceTo(guardian) <= 40) {
+                        if (this.player.distanceTo(guardian) <= 40.0F) {
                             musicType = ModMusicTypes.OCEAN_MONUMENT;
                             break;
                         }
@@ -144,7 +145,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                 } else if (this.player.world.getDimensionKey() == DimensionTypes.THE_END) {
                     List<ShulkerEntity> nearbyShulkers = this.player.world.getEntitiesByType(EntityType.SHULKER, new Box(playerPos.subtract(new Vec3i(50, 50, 50)), playerPos.add(new Vec3i(50, 50, 50))), EntityPredicates.VALID_LIVING_ENTITY);
                     for (ShulkerEntity shulker : nearbyShulkers) {
-                        if (this.player.distanceTo(shulker) <= 50) {
+                        if (this.player.distanceTo(shulker) <= 50.0F) {
                             musicType = ModMusicTypes.END_CITY;
                             break;
                         }

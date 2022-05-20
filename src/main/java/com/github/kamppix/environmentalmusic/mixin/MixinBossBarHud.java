@@ -20,7 +20,7 @@ public class MixinBossBarHud implements IMixinBossBarHud {
         for(Map.Entry<UUID, ClientBossBar> entry : bossBars.entrySet()) {
             ClientBossBar bar = entry.getValue();
 
-            if (bar.getColor() == BossBar.Color.RED && bar.getName().getString().startsWith("Raid") && bar.getPercent() > 0.0f) {
+            if (bar.getColor() == BossBar.Color.RED && bar.getName().getString().startsWith("Raid") && bar.getPercent() > 0.0F) {
                 return true;
             }
         }
