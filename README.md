@@ -17,5 +17,5 @@ Music packs are placed in the same directory as any other resource packs, `.mine
 #### To create a music pack:
 
 1. Download the music pack template provided with your version of the mod
-2. Place your **OGG** music files in `assets/environmentalmusic/sounds` (filenames must consist of [a-z0-9/.\_-])
-3. Insert your music filenames into `sounds.json` as follows: `"name": "environmentalmusic:<filename without .ogg>"`
+2. Place the OGG music files in `assets/environmentalmusic/sounds` (filenames must consist of [a-z0-9/.\_-])
+3. Insert the music filenames into `sounds.json` as follows: `"name": "environmentalmusic:<filename without .ogg>"`
