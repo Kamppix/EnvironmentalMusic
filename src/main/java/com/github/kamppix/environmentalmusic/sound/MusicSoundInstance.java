@@ -1,11 +1,9 @@
 package com.github.kamppix.environmentalmusic.sound;
 
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.TickableSoundInstance;
 import net.minecraft.sound.MusicSound;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.random.AbstractRandom;
 
 public class MusicSoundInstance extends PositionedSoundInstance implements TickableSoundInstance {
