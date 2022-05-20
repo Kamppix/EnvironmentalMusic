@@ -10,8 +10,8 @@ public class ModMusicType {
     public static final MusicSound OCEAN_NIGHT = new MusicSound(ModSoundEvents.MUSIC_OCEAN_NIGHT, 0, 0, false);
     public static final MusicSound JUNGLE_DAY = new MusicSound(ModSoundEvents.MUSIC_JUNGLE_DAY, 0, 0, false);
     public static final MusicSound JUNGLE_NIGHT = new MusicSound(ModSoundEvents.MUSIC_JUNGLE_NIGHT, 0, 0, false);
-    public static final MusicSound SPACE_DAY = new MusicSound(ModSoundEvents.MUSIC_SPACE_DAY, 0, 0, false);
-    public static final MusicSound SPACE_NIGHT = new MusicSound(ModSoundEvents.MUSIC_SPACE_NIGHT, 0, 0, false);
+    public static final MusicSound SKY_DAY = new MusicSound(ModSoundEvents.MUSIC_SKY_DAY, 0, 0, false);
+    public static final MusicSound SKY_NIGHT = new MusicSound(ModSoundEvents.MUSIC_SKY_NIGHT, 0, 0, false);
     public static final MusicSound RAIN_DAY = new MusicSound(ModSoundEvents.MUSIC_RAIN_DAY, 0, 0, false);
     public static final MusicSound RAIN_NIGHT = new MusicSound(ModSoundEvents.MUSIC_RAIN_NIGHT, 0, 0, false);
     public static final MusicSound THUNDER = new MusicSound(ModSoundEvents.MUSIC_THUNDER, 0, 0, false);
