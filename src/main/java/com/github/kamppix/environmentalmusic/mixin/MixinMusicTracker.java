@@ -34,7 +34,7 @@ public class MixinMusicTracker {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void tick(CallbackInfo info) {
-        if (this.client.options.getSoundVolume(SoundCategory.MUSIC) == 0.0f) {
+        if (this.client.options.getSoundVolume(SoundCategory.MUSIC) == 0.0F) {
             stop(info);
 
         } else {
@@ -70,13 +70,13 @@ public class MixinMusicTracker {
 
                     if (type == currentType) {
                         if (shouldDipMusicVolume(currentType)) {
-                            instance.setVolume(Math.max(0.069f, instance.getVolume() - 0.012375f));
+                            instance.setVolume(Math.max(0.069F, instance.getVolume() - 0.0123F));
                         } else {
-                            instance.setVolume(Math.min(1.0f, instance.getVolume() + 0.012375f));
+                            instance.setVolume(Math.min(1.0F, instance.getVolume() + 0.0123F));
                         }
                     } else {
-                        instance.setVolume(Math.max(0.01f, instance.getVolume() - 0.012375f));
-                        if (instance.getVolume() == 0.01f) {
+                        instance.setVolume(Math.max(0.01F, instance.getVolume() - 0.0123F));
+                        if (instance.getVolume() == 0.01F) {
                             this.client.getSoundManager().stop(instance);
                             itr.remove();
                         }
@@ -94,7 +94,7 @@ public class MixinMusicTracker {
             List<WardenEntity> nearbyWardens = this.client.player.world.getEntitiesByType(EntityType.WARDEN, new Box(playerPos.subtract(new Vec3i(64, 64, 64)), playerPos.add(new Vec3i(64, 64, 64))), EntityPredicates.VALID_LIVING_ENTITY);
 
             for (WardenEntity warden : nearbyWardens) {
-                if (this.client.player.distanceTo(warden) <= 64) return true;
+                if (this.client.player.distanceTo(warden) <= 64.0F) return true;
             }
         }
 
