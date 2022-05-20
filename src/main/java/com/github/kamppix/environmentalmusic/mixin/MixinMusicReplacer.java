@@ -2,7 +2,7 @@ package com.github.kamppix.environmentalmusic.mixin;
 
 import com.github.kamppix.environmentalmusic.access.IMixinBossBarHud;
 import com.github.kamppix.environmentalmusic.access.IMixinMusicReplacer;
-import com.github.kamppix.environmentalmusic.sound.ModMusicType;
+import com.github.kamppix.environmentalmusic.sound.ModMusicTypes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.CreditsScreen;
@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.GuardianEntity;
+import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.sound.MusicSound;
@@ -51,7 +52,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
 
     private MusicSound getReplacedMusicType() {
         if (this.currentScreen instanceof CreditsScreen) {
-            return ModMusicType.CREDITS;
+            return ModMusicTypes.CREDITS;
         }
         if (this.player != null) {
             MusicSound musicType = null;
@@ -63,33 +64,33 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                 boolean isDay = isDayMusic();
 
                 if (biome.matchesKey(BiomeKeys.RIVER) || biome.matchesKey(BiomeKeys.STONY_SHORE)) {
-                    musicType = ModMusicType.NONE;
+                    musicType = ModMusicTypes.NONE;
                 } else if (biome.matchesKey(BiomeKeys.CRIMSON_FOREST)) {
-                    musicType = ModMusicType.CRIMSON_FOREST;
+                    musicType = ModMusicTypes.CRIMSON_FOREST;
                 } else if (biome.matchesKey(BiomeKeys.WARPED_FOREST)) {
-                    musicType = ModMusicType.WARPED_FOREST;
+                    musicType = ModMusicTypes.WARPED_FOREST;
                 } else if (biome.matchesKey(BiomeKeys.SOUL_SAND_VALLEY)) {
-                    musicType = ModMusicType.SOUL_SAND_VALLEY;
+                    musicType = ModMusicTypes.SOUL_SAND_VALLEY;
                 } else if (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_NETHER))) {
-                    musicType = ModMusicType.NETHER;
+                    musicType = ModMusicTypes.NETHER;
                 } else if (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_END))) {
-                    musicType = ModMusicType.END;
+                    musicType = ModMusicTypes.END;
                 } else if (biome.matchesKey(BiomeKeys.BEACH) || (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_OCEAN)) && !biome.matchesKey(BiomeKeys.FROZEN_OCEAN) || biome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN))) {
-                    musicType = isDay ? ModMusicType.OCEAN_DAY : ModMusicType.OCEAN_NIGHT;
+                    musicType = isDay ? ModMusicTypes.OCEAN_DAY : ModMusicTypes.OCEAN_NIGHT;
                 } else if (biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_JUNGLE))) {
-                    musicType = isDay ? ModMusicType.JUNGLE_DAY : ModMusicType.JUNGLE_NIGHT;
+                    musicType = isDay ? ModMusicTypes.JUNGLE_DAY : ModMusicTypes.JUNGLE_NIGHT;
                 } else if (biome.matchesKey(BiomeKeys.DESERT) || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_SAVANNA)) || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_BADLANDS))) {
-                    musicType = ModMusicType.DESERT;
+                    musicType = ModMusicTypes.DESERT;
                 } else if (biome.value().getTemperature() <= 0.0f || biome.matchesKey(BiomeKeys.SNOWY_BEACH) || biome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN)) {
-                    musicType = ModMusicType.SNOW;
+                    musicType = ModMusicTypes.SNOW;
                 } else if (biome.matchesKey(BiomeKeys.MUSHROOM_FIELDS)) {
-                    musicType = ModMusicType.MUSHROOM;
+                    musicType = ModMusicTypes.MUSHROOM;
                 } else if (biome.matchesKey(BiomeKeys.LUSH_CAVES)) {
-                    musicType = ModMusicType.LUSH_CAVES;
+                    musicType = ModMusicTypes.LUSH_CAVES;
                 } else if(biome.matchesKey(BiomeKeys.DEEP_DARK)) {
-                    musicType = ModMusicType.DEEP_DARK;
+                    musicType = ModMusicTypes.DEEP_DARK;
                 } else {
-                    musicType = isDay ? ModMusicType.OVERWORLD_DAY : ModMusicType.OVERWORLD_NIGHT;
+                    musicType = isDay ? ModMusicTypes.OVERWORLD_DAY : ModMusicTypes.OVERWORLD_NIGHT;
                 }
 
                 if (this.player.world.getDimensionKey() == DimensionTypes.OVERWORLD) {
@@ -100,16 +101,16 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
 
                     switch (playerDepth) {
                         case 0:
-                            musicType = isDay ? ModMusicType.SKY_DAY : ModMusicType.SKY_NIGHT;
+                            musicType = isDay ? ModMusicTypes.SKY_DAY : ModMusicTypes.SKY_NIGHT;
                             break;
                         case 2:
-                            if (biome.streamTags().noneMatch(Predicate.isEqual(BiomeTags.IS_OCEAN)) && musicType != ModMusicType.LUSH_CAVES && musicType != ModMusicType.DEEP_DARK) {
-                                musicType = ModMusicType.UNDERGROUND;
+                            if (biome.streamTags().noneMatch(Predicate.isEqual(BiomeTags.IS_OCEAN)) && musicType != ModMusicTypes.LUSH_CAVES && musicType != ModMusicTypes.DEEP_DARK) {
+                                musicType = ModMusicTypes.UNDERGROUND;
                             }
                             break;
                         case 3:
-                            if (musicType != ModMusicType.LUSH_CAVES && musicType != ModMusicType.DEEP_DARK) {
-                                musicType = ModMusicType.UNDERGROUND;
+                            if (musicType != ModMusicTypes.LUSH_CAVES && musicType != ModMusicTypes.DEEP_DARK) {
+                                musicType = ModMusicTypes.UNDERGROUND;
                             }
                             break;
                     }
@@ -121,38 +122,47 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                             villagersInRange++;
                         }
                     }
-                    if (villagersInRange > 2 && musicType != ModMusicType.MUSHROOM) musicType = isDay ? ModMusicType.VILLAGE_DAY : ModMusicType.VILLAGE_NIGHT;
+                    if (villagersInRange > 2 && musicType != ModMusicTypes.MUSHROOM) musicType = isDay ? ModMusicTypes.VILLAGE_DAY : ModMusicTypes.VILLAGE_NIGHT;
 
                     List<GuardianEntity> nearbyGuardians = this.player.world.getEntitiesByType(EntityType.GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
                     nearbyGuardians.addAll(this.player.world.getEntitiesByType(EntityType.ELDER_GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY));
                     for (GuardianEntity guardian : nearbyGuardians) {
                         if (this.player.distanceTo(guardian) <= 40) {
-                            musicType = ModMusicType.MONUMENT;
+                            musicType = ModMusicTypes.MONUMENT;
                             break;
                         }
                     }
 
                     if (playerDepth == 1) {
-                        if (this.player.world.isThundering() && (musicType == ModMusicType.NONE || musicType == ModMusicType.OVERWORLD_DAY || musicType == ModMusicType.OVERWORLD_NIGHT || musicType == ModMusicType.OCEAN_DAY || musicType == ModMusicType.OCEAN_NIGHT || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_JUNGLE)))) {
-                            musicType = ModMusicType.THUNDER;
-                        } else if (this.player.world.isRaining() && (musicType == ModMusicType.NONE || musicType == ModMusicType.OVERWORLD_DAY || musicType == ModMusicType.OVERWORLD_NIGHT)) {
-                            musicType = isDay ? ModMusicType.RAIN_DAY : ModMusicType.RAIN_NIGHT;
+                        if (this.player.world.isThundering() && (musicType == ModMusicTypes.NONE || musicType == ModMusicTypes.OVERWORLD_DAY || musicType == ModMusicTypes.OVERWORLD_NIGHT || musicType == ModMusicTypes.OCEAN_DAY || musicType == ModMusicTypes.OCEAN_NIGHT || biome.streamTags().anyMatch(Predicate.isEqual(BiomeTags.IS_JUNGLE)))) {
+                            musicType = ModMusicTypes.THUNDER;
+                        } else if (this.player.world.isRaining() && (musicType == ModMusicTypes.NONE || musicType == ModMusicTypes.OVERWORLD_DAY || musicType == ModMusicTypes.OVERWORLD_NIGHT)) {
+                            musicType = isDay ? ModMusicTypes.RAIN_DAY : ModMusicTypes.RAIN_NIGHT;
+                        }
+                    }
+
+                } else if (this.player.world.getDimensionKey() == DimensionTypes.THE_END) {
+                    List<ShulkerEntity> nearbyShulkers = this.player.world.getEntitiesByType(EntityType.SHULKER, new Box(playerPos.subtract(new Vec3i(50, 50, 50)), playerPos.add(new Vec3i(50, 50, 50))), EntityPredicates.VALID_LIVING_ENTITY);
+                    for (ShulkerEntity shulker : nearbyShulkers) {
+                        if (this.player.distanceTo(shulker) <= 50) {
+                            musicType = ModMusicTypes.END_CITY;
+                            break;
                         }
                     }
                 }
 
                 if (this.inGameHud.getBossBarHud().shouldPlayDragonMusic()) {
-                    musicType = ModMusicType.DRAGON;
+                    musicType = ModMusicTypes.DRAGON;
                 } else if (this.inGameHud.getBossBarHud().shouldDarkenSky()) {
-                    musicType = ModMusicType.WITHER;
+                    musicType = ModMusicTypes.WITHER;
                 } else if (((IMixinBossBarHud) (Object) this.inGameHud.getBossBarHud()).shouldPlayRaidMusic()) {
-                    musicType = ModMusicType.RAID;
+                    musicType = ModMusicTypes.RAID;
                 }
             }
 
             return musicType;
         }
-        return ModMusicType.MENU;
+        return ModMusicTypes.MENU;
     }
 
     public boolean isDayMusic() {
@@ -163,16 +173,16 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
     @Override
     public MusicSound updateNoneMusicType(MusicSound type) {
         boolean isDay = isDayMusic();
-        if (type == ModMusicType.OVERWORLD_DAY || type == ModMusicType.OVERWORLD_NIGHT || type == ModMusicType.SKY_DAY || type == ModMusicType.SKY_NIGHT || type == ModMusicType.UNDERGROUND || type == ModMusicType.LUSH_CAVES || type == ModMusicType.DEEP_DARK || type == ModMusicType.RAIN_DAY || type == ModMusicType.RAIN_NIGHT || type == ModMusicType.THUNDER || type == ModMusicType.VILLAGE_DAY || type == ModMusicType.VILLAGE_NIGHT || type == ModMusicType.RAID || type == ModMusicType.WITHER) {
-            return isDay ? ModMusicType.OVERWORLD_DAY : ModMusicType.OVERWORLD_NIGHT;
+        if (type == ModMusicTypes.OVERWORLD_DAY || type == ModMusicTypes.OVERWORLD_NIGHT || type == ModMusicTypes.SKY_DAY || type == ModMusicTypes.SKY_NIGHT || type == ModMusicTypes.UNDERGROUND || type == ModMusicTypes.LUSH_CAVES || type == ModMusicTypes.DEEP_DARK || type == ModMusicTypes.RAIN_DAY || type == ModMusicTypes.RAIN_NIGHT || type == ModMusicTypes.THUNDER || type == ModMusicTypes.VILLAGE_DAY || type == ModMusicTypes.VILLAGE_NIGHT || type == ModMusicTypes.RAID || type == ModMusicTypes.WITHER) {
+            return isDay ? ModMusicTypes.OVERWORLD_DAY : ModMusicTypes.OVERWORLD_NIGHT;
         }
-        if (type == ModMusicType.OCEAN_DAY || type == ModMusicType.OCEAN_NIGHT) return isDay ? ModMusicType.OCEAN_DAY : ModMusicType.OCEAN_NIGHT;
-        if (type == ModMusicType.JUNGLE_DAY || type == ModMusicType.JUNGLE_NIGHT) return isDay ? ModMusicType.JUNGLE_DAY : ModMusicType.JUNGLE_NIGHT;
+        if (type == ModMusicTypes.OCEAN_DAY || type == ModMusicTypes.OCEAN_NIGHT) return isDay ? ModMusicTypes.OCEAN_DAY : ModMusicTypes.OCEAN_NIGHT;
+        if (type == ModMusicTypes.JUNGLE_DAY || type == ModMusicTypes.JUNGLE_NIGHT) return isDay ? ModMusicTypes.JUNGLE_DAY : ModMusicTypes.JUNGLE_NIGHT;
         else return null;
     }
 
     @Override
     public MusicSound getMusicTypeDefault() {
-        return isDayMusic() ? ModMusicType.OVERWORLD_DAY : ModMusicType.OVERWORLD_NIGHT;
+        return isDayMusic() ? ModMusicTypes.OVERWORLD_DAY : ModMusicTypes.OVERWORLD_NIGHT;
     }
 }

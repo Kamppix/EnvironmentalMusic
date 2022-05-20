@@ -1,7 +1,7 @@
 package com.github.kamppix.environmentalmusic.mixin;
 
 import com.github.kamppix.environmentalmusic.access.IMixinMusicReplacer;
-import com.github.kamppix.environmentalmusic.sound.ModMusicType;
+import com.github.kamppix.environmentalmusic.sound.ModMusicTypes;
 import com.github.kamppix.environmentalmusic.sound.MusicSoundInstance;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MusicTracker;
@@ -41,8 +41,8 @@ public class MixinMusicTracker {
             MusicSound currentType = this.client.getMusicType();
 
             if (currentType != null) {
-                if (currentType == ModMusicType.NONE) {
-                    if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicType.RAIN_DAY || getMaxVolumeMusicType() == ModMusicType.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicType.THUNDER || getMaxVolumeMusicType() == ModMusicType.WITHER) {
+                if (currentType == ModMusicTypes.NONE) {
+                    if (this.playingMusic.isEmpty() || getMaxVolumeMusicType() == ModMusicTypes.RAIN_DAY || getMaxVolumeMusicType() == ModMusicTypes.RAIN_NIGHT || getMaxVolumeMusicType() == ModMusicTypes.THUNDER || getMaxVolumeMusicType() == ModMusicTypes.WITHER) {
                         currentType = ((IMixinMusicReplacer) (Object) this.client).getMusicTypeDefault();
                     } else {
                         currentType = getMaxVolumeMusicType();
@@ -89,7 +89,7 @@ public class MixinMusicTracker {
     }
 
     private boolean shouldDipMusicVolume(MusicSound currentType) {
-        if (this.client.player != null && currentType != ModMusicType.RAID && currentType != ModMusicType.WITHER && currentType != ModMusicType.DRAGON) {
+        if (this.client.player != null && currentType != ModMusicTypes.RAID && currentType != ModMusicTypes.WITHER && currentType != ModMusicTypes.DRAGON) {
             BlockPos playerPos = this.client.player.getBlockPos();
             List<WardenEntity> nearbyWardens = this.client.player.world.getEntitiesByType(EntityType.WARDEN, new Box(playerPos.subtract(new Vec3i(64, 64, 64)), playerPos.add(new Vec3i(64, 64, 64))), EntityPredicates.VALID_LIVING_ENTITY);
 
@@ -120,7 +120,7 @@ public class MixinMusicTracker {
         instance.getSoundSet(this.client.getSoundManager());
 
         if (instance.getSound() != SoundManager.MISSING_SOUND) {
-            if (type != ModMusicType.MENU) instance.setVolume(0.01f);
+            if (type != ModMusicTypes.MENU) instance.setVolume(0.01f);
             this.playingMusic.put(type, instance);
             this.client.getSoundManager().play(instance);
         }
