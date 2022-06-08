@@ -14,7 +14,9 @@ In addition to installing the mod, you'll need to get yourself a resource pack t
 
 Music packs are placed in the same directory as any other resource packs, `.minecraft/resourcepacks`.
 
-#### To create a music pack:
+You can create a music pack using [Pixel Music Packer](https://github.com/Kamppix/PixelMusicPacker) or, if you want, you can do it manually.
+
+#### To create a music pack manually:
 
 1. Download the music pack template provided with your version of the mod
 2. Place the OGG music files in `assets/environmentalmusic/sounds` (filenames must consist of [a-z0-9/.\_-])
