@@ -8,6 +8,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.CreditsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.GuardianEntity;
 import net.minecraft.entity.mob.ShulkerEntity;
@@ -167,7 +168,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
     }
 
     public boolean isDayMusic() {
-        long daytime = this.player.world.getTimeOfDay();
+        long daytime = this.player.world.getTimeOfDay() % 24000;
         return daytime < 13050 || daytime >= 23450;
     }
 
