@@ -33,6 +33,7 @@ public class ModSoundEvents {
     public static final SoundEvent MUSIC_WARPED_FOREST = registerSoundEvent("music.warped_forest");
     public static final SoundEvent MUSIC_SOUL_SAND_VALLEY = registerSoundEvent("music.soul_sand_valley");
     public static final SoundEvent MUSIC_WITHER = registerSoundEvent("music.wither");
+    public static final SoundEvent MUSIC_STRONGHOLD = registerSoundEvent("music.stronghold");
     public static final SoundEvent MUSIC_THE_END = registerSoundEvent("music.the_end");
     public static final SoundEvent MUSIC_END_CITY = registerSoundEvent("music.end_city");
     public static final SoundEvent MUSIC_ENDER_DRAGON = registerSoundEvent("music.ender_dragon");
