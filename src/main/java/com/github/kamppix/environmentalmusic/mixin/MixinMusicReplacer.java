@@ -3,12 +3,15 @@ package com.github.kamppix.environmentalmusic.mixin;
 import com.github.kamppix.environmentalmusic.access.IMixinBossBarHud;
 import com.github.kamppix.environmentalmusic.access.IMixinMusicReplacer;
 import com.github.kamppix.environmentalmusic.sound.ModMusicTypes;
+import net.minecraft.block.Block;
+import net.minecraft.block.EndPortalBlock;
+import net.minecraft.block.EndPortalFrameBlock;
+import net.minecraft.block.InfestedBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.CreditsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.GuardianEntity;
 import net.minecraft.entity.mob.ShulkerEntity;
@@ -45,6 +48,12 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
     private static final int SKY_LAYER = 200;
     private static final int UNDERGROUND_LAYER = 40;
     private static final int CAVERN_LAYER = -10;
+
+    private static final float VILLAGER_RANGE = 40.0F;
+    private static final float GUARDIAN_RANGE = 40.0F;
+    private static final float SHULKER_RANGE = 50.0F;
+    private static final int STRONGHOLD_RANGE = 12;
+    private static final int INFESTED_BLOCK_LIMIT = 8;
 
     @SuppressWarnings("all")
     @Inject(method = "getMusicType()Lnet/minecraft/sound/MusicSound;", at = @At("HEAD"), cancellable = true)
@@ -117,19 +126,19 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                             break;
                     }
 
-                    List<VillagerEntity> nearbyVillagers = this.player.world.getEntitiesByType(EntityType.VILLAGER, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
+                    List<VillagerEntity> nearbyVillagers = this.player.world.getEntitiesByType(EntityType.VILLAGER, new Box(playerPos.subtract(new Vec3i(VILLAGER_RANGE, VILLAGER_RANGE, VILLAGER_RANGE)), playerPos.add(new Vec3i(VILLAGER_RANGE, VILLAGER_RANGE, VILLAGER_RANGE))), EntityPredicates.VALID_LIVING_ENTITY);
                     int villagersInRange = 0;
                     for (VillagerEntity villager : nearbyVillagers) {
-                        if (this.player.distanceTo(villager) <= 40.0F) {
+                        if (this.player.distanceTo(villager) <= VILLAGER_RANGE) {
                             villagersInRange++;
                         }
                     }
                     if (villagersInRange > 2 && musicType != ModMusicTypes.MUSHROOM_FIELDS) musicType = isDay ? ModMusicTypes.VILLAGE_DAY : ModMusicTypes.VILLAGE_NIGHT;
 
-                    List<GuardianEntity> nearbyGuardians = this.player.world.getEntitiesByType(EntityType.GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY);
-                    nearbyGuardians.addAll(this.player.world.getEntitiesByType(EntityType.ELDER_GUARDIAN, new Box(playerPos.subtract(new Vec3i(40, 40, 40)), playerPos.add(new Vec3i(40, 40, 40))), EntityPredicates.VALID_LIVING_ENTITY));
+                    List<GuardianEntity> nearbyGuardians = this.player.world.getEntitiesByType(EntityType.GUARDIAN, new Box(playerPos.subtract(new Vec3i(GUARDIAN_RANGE, GUARDIAN_RANGE, GUARDIAN_RANGE)), playerPos.add(new Vec3i(GUARDIAN_RANGE, GUARDIAN_RANGE, GUARDIAN_RANGE))), EntityPredicates.VALID_LIVING_ENTITY);
+                    nearbyGuardians.addAll(this.player.world.getEntitiesByType(EntityType.ELDER_GUARDIAN, new Box(playerPos.subtract(new Vec3i(GUARDIAN_RANGE, GUARDIAN_RANGE, GUARDIAN_RANGE)), playerPos.add(new Vec3i(GUARDIAN_RANGE, GUARDIAN_RANGE, GUARDIAN_RANGE))), EntityPredicates.VALID_LIVING_ENTITY));
                     for (GuardianEntity guardian : nearbyGuardians) {
-                        if (this.player.distanceTo(guardian) <= 40.0F) {
+                        if (this.player.distanceTo(guardian) <= GUARDIAN_RANGE) {
                             musicType = ModMusicTypes.OCEAN_MONUMENT;
                             break;
                         }
@@ -144,11 +153,31 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                     }
 
                 } else if (this.player.world.getDimensionKey() == DimensionTypes.THE_END) {
-                    List<ShulkerEntity> nearbyShulkers = this.player.world.getEntitiesByType(EntityType.SHULKER, new Box(playerPos.subtract(new Vec3i(50, 50, 50)), playerPos.add(new Vec3i(50, 50, 50))), EntityPredicates.VALID_LIVING_ENTITY);
+                    List<ShulkerEntity> nearbyShulkers = this.player.world.getEntitiesByType(EntityType.SHULKER, new Box(playerPos.subtract(new Vec3i(SHULKER_RANGE, SHULKER_RANGE, SHULKER_RANGE)), playerPos.add(new Vec3i(SHULKER_RANGE, SHULKER_RANGE, SHULKER_RANGE))), EntityPredicates.VALID_LIVING_ENTITY);
                     for (ShulkerEntity shulker : nearbyShulkers) {
-                        if (this.player.distanceTo(shulker) <= 50.0F) {
+                        if (this.player.distanceTo(shulker) <= SHULKER_RANGE) {
                             musicType = ModMusicTypes.END_CITY;
                             break;
+                        }
+                    }
+                }
+
+                int infestedBlockCount = 0;
+                stronghold:
+                for (int dx = -STRONGHOLD_RANGE; dx <= STRONGHOLD_RANGE; dx++) {
+                    for (int dy = -STRONGHOLD_RANGE; dy <= STRONGHOLD_RANGE; dy++) {
+                        for (int dz = -STRONGHOLD_RANGE; dz <= STRONGHOLD_RANGE; dz++) {
+                            Block testBlock = this.player.getWorld().getBlockState(playerPos.add(new BlockPos(new Vec3i(dx, dy, dz)))).getBlock();
+                            if (testBlock instanceof EndPortalFrameBlock || testBlock instanceof EndPortalBlock) {
+                                musicType = ModMusicTypes.STRONGHOLD;
+                                break stronghold;
+                            } else if (testBlock instanceof InfestedBlock) {
+                                infestedBlockCount++;
+                                if (infestedBlockCount == INFESTED_BLOCK_LIMIT) {
+                                    musicType = ModMusicTypes.STRONGHOLD;
+                                    break stronghold;
+                                }
+                            }
                         }
                     }
                 }
