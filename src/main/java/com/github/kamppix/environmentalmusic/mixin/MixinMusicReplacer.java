@@ -168,7 +168,7 @@ public class MixinMusicReplacer implements IMixinMusicReplacer {
                     for (int dy = -STRONGHOLD_RANGE; dy <= STRONGHOLD_RANGE; dy++) {
                         for (int dz = -STRONGHOLD_RANGE; dz <= STRONGHOLD_RANGE; dz++) {
                             Block testBlock = this.player.getWorld().getBlockState(playerPos.add(new BlockPos(new Vec3i(dx, dy, dz)))).getBlock();
-                            if (testBlock instanceof EndPortalFrameBlock || testBlock instanceof EndPortalBlock) {
+                            if (testBlock instanceof EndPortalFrameBlock) {
                                 musicType = ModMusicTypes.STRONGHOLD;
                                 break stronghold;
                             } else if (testBlock instanceof InfestedBlock) {
