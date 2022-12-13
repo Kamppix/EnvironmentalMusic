@@ -9,7 +9,8 @@
     "Kamppi"
   ],
   "contact": {
-    "homepage": "https://github.com/Kamppix/EnvironmentalMusic"
+    "homepage": "https://github.com/Kamppix/EnvironmentalMusic",
+    "issues": "https://github.com/Kamppix/EnvironmentalMusic/issues"
   },
 
   "license": "MIT",
